@@ -1,0 +1,33 @@
+{
+  "tables": {
+    "users": {
+      "id": "number",
+      "name": "string"
+    },
+    "filterresults": {
+      "selectedFiles": "string",
+      "totalSize": "number",
+      "estimatedTokens": "number",
+      "content": "string"
+    },
+    "hosbyschemas": {
+      "tables": "string",
+      "metadata": "string",
+      "version": "string"
+    },
+    "versioninfos": {
+      "latest": "string",
+      "current": "string",
+      "updateAvailable": "boolean",
+      "releaseNotes": "string",
+      "downloadUrl": "string"
+    },
+    "authcredentialss": {
+      "userId": "string",
+      "cliToken": "string",
+      "sessionToken": "string"
+    }
+  },
+  "version": "1.0.0",
+  "metadata": {}
+}
