@@ -1,6 +1,6 @@
 {
   "name": "hosby-cli",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A powerful CLI tool for generating and managing database schemas and services for front-end, mobile, and desktop projects",
   "author": "Hosby Team <support@hosby.io>",
   "license": "MIT",
