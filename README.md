@@ -22,7 +22,7 @@
 
 ## Overview
 
-Hosby CLI is a sophisticated command-line interface tool designed to streamline the development workflow for modern web, mobile, and desktop applications. It analyzes your project's codebase to automatically generate optimized JSON schemas, create type-safe API clients, and manage your data models efficiently. With powerful AI integration, Hosby CLI intelligently interprets your code structure to create schemas that perfectly match your application's needs.
+Hosby CLI is a sophisticated command-line interface tool designed to streamline the development workflow for modern web, mobile, and desktop applications. It analyzes your project's codebase to automatically generate optimized JSON schemas data models, create type-safe API clients, and manage your data models efficiently. With powerful AI integration, Hosby CLI intelligently interprets your code structure to create schemas that perfectly match your application's needs.
 
 ## Installation
 
@@ -41,7 +41,7 @@ hosby --version
 
 ### Core Capabilities
 
-- **Intelligent Schema Generation**: Automatically analyze TypeScript/JavaScript projects to create optimized JSON schemas
+- **Intelligent Schema Generation**: Automatically analyze TypeScript/JavaScript projects to create optimized JSON schemas data models
 - **AI-Powered Analysis**: Leverage advanced AI models (OpenAI or Claude) to interpret complex codebases
 - **Cloud Synchronization**: Seamlessly push and pull schemas between local development and Hosby cloud
 - **TypeScript Client Generation**: Auto-generate type-safe API clients for your schemas
@@ -61,7 +61,7 @@ hosby --version
 
 - Node.js 14.x or higher
 - TypeScript project (for optimal results)
-- Hosby account (for cloud features)
+- Hosby account (for cloud features)(optional)
 
 ### Quick Start
 
