@@ -6,10 +6,11 @@ import { analyzeWithAI } from "../core/ai.js";
 import { AIProvider } from "../types/types.js";
 import {
     generateServiceFromTemplate,
-    cleanupAndFail,
-    cleanupAndSucceed
+    cleanupAndSucceed,
+    cleanupAndFail
 } from "../helpers/utils.js";
 import { generateServiceWithAIprompt } from "../scripts/prompts.js";
+import { SimpleSpinner } from "../types/types.js";
 
 
 /**
@@ -68,7 +69,7 @@ export async function generateService(
     tableName: string,
     tableSchema: Record<string, unknown>,
     servicesDir: string,
-    spinner: { text: string; succeed: (text: string) => void; fail: (text: string) => void },
+    spinner: SimpleSpinner,
     spinnerUpdateInterval: NodeJS.Timeout
 ): Promise<boolean> {
     if (useAI) {
@@ -91,7 +92,7 @@ export async function generateWithAI(
     tableName: string,
     tableSchema: Record<string, unknown>,
     servicesDir: string,
-    spinner: { text: string; succeed: (text: string) => void; fail: (text: string) => void },
+    spinner: SimpleSpinner,
     spinnerUpdateInterval: NodeJS.Timeout
 ): Promise<boolean> {
     const timeoutPromise = new Promise((_, reject) => {
@@ -137,7 +138,7 @@ export function generateWithTemplate(
     tableName: string,
     tableSchema: Record<string, unknown>,
     servicesDir: string,
-    spinner: { text: string; succeed: (text: string) => void; fail: (text: string) => void },
+    spinner: SimpleSpinner,
     spinnerUpdateInterval: NodeJS.Timeout,
     isFallback: boolean = false
 ): boolean {

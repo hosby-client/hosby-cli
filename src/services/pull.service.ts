@@ -298,10 +298,17 @@ export function updateLastPullTime(lastPullTimeFile: string, schemaHash: string)
 
 /**
  * Handles errors that occur during the pull operation
- * @param {any} err - Error object
+ * @param {Error} err - Error object
  * @param {Ora} spinner - Ora spinner instance
  */
-export function handlePullError(err: any, spinner: Ora): void {
+export function handlePullError(err: Error & { 
+    code?: string;
+    response?: { 
+        status?: number; 
+        statusText?: string; 
+        data?: unknown;
+    };
+}, spinner: Ora): void {
     spinner.fail("❌ Error during pull operation");
     logger.error("Pull operation failed", err);
 

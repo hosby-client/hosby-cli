@@ -3,7 +3,7 @@ import { analyzeWithAI } from "../core/ai.js";
 import { getCredentials } from "../core/config.js";
 import { AIProvider } from "../types/types.js";
 
-export async function ai() {
+export async function ai(): Promise<void> {
   console.log("🤖 Starting AI analysis...");
   
   const scanPath = process.cwd();
@@ -42,7 +42,7 @@ export async function ai() {
     const schema = await analyzeWithAI(scanPath, { provider });
     console.log("✅ AI analysis completed successfully!");
     console.log(`📊 Generated schema with ${Object.keys(schema.tables || {}).length} tables.`);
-  } catch (error: any) {
-    console.error(`❌ AI analysis failed: ${error.message || 'Unknown error'}`);
+  } catch (error: unknown) {
+    console.error(`❌ AI analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }

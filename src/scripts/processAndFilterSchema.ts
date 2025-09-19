@@ -3,6 +3,7 @@ import path from "path";
 import ora from "ora";
 import logger from "../helpers/logger.js";
 import { filterSchema, sanitizeSchema } from "../helpers/filterSchema.js";
+import { HosbySchema } from "../types/types.js";
 
 /**
  * Processes and filters the schema
@@ -13,12 +14,12 @@ import { filterSchema, sanitizeSchema } from "../helpers/filterSchema.js";
  * @param {string} scanPath - The path to the scan directory
  */
 export function processAndFilterSchema(
-    schema: any,
-    filteredSchema: any,
+    schema: HosbySchema,
+    filteredSchema: HosbySchema,
     schemaStats: { tableCount: number, columnCount: number },
     spinner: ReturnType<typeof ora>,
     scanPath: string
-) {
+): void {
     try {
         spinner.text = "📝 Sanitizing and filtering schema...";
         schema = sanitizeSchema(schema);
@@ -50,8 +51,9 @@ export function processAndFilterSchema(
             spinner.fail(`Failed to write schema to ${schemaPath}`);
             return;
         }
-    } catch (error: any) {
-        spinner.fail(`Failed to process schema: ${error.message || 'Unknown error'}`);
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        spinner.fail(`Failed to process schema: ${errorMessage}`);
         return;
     }
 }

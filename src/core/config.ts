@@ -72,7 +72,7 @@ export async function getProjectInfos(): Promise<ProjectCredentials> {
     const schemaPath = path.join(process.cwd(), "hosby.schema.json");
     const schemaContent = fs.readFileSync(schemaPath, 'utf8');
     const schema: HosbySchema = JSON.parse(schemaContent);
-    const projectInfo = schema?.metadata?.project || {};
+    const projectInfo = (schema?.metadata?.project as Record<string, string>) || { id: "", name: "" };
 
     return {
       id: projectInfo.id,

@@ -1,1 +1,1 @@
-interface User { id: number; name: string; }
+interface _User { id: number; name: string; }

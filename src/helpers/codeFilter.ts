@@ -322,7 +322,7 @@ function filterUIComponents(content: string): string {
     }
 
     const propsRegex = /(?:interface|type)\s+([A-Z]\w*(?:Props|State|Config|Options|Attrs|Events))\s*(?:<[^>]*>)?\s*(?:=\s*)?\{[\s\S]*?\}(?=\s*(?:export|;|$))/g;
-    filteredContent = filteredContent.replace(propsRegex, (match, typeName) => {
+    filteredContent = filteredContent.replace(propsRegex, (_match, _typeName) => {
         return '';
     });
 

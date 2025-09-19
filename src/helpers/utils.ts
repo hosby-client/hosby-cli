@@ -1,21 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import fs from "fs";
 import logger from "./logger.js";
 import path from "path";
-import ora from "ora";
+import ora, { Ora } from "ora";
 import inquirer from "inquirer";
+import { SimpleSpinner } from "../types/types.js";
 
 /**
  * Prompts the user to choose whether to use AI
  * @returns Boolean indicating whether to use AI
  */
-export async function promptForUsage(usageLabel: string, message: string, type?: string, ): Promise<boolean> {
+export async function promptForUsage(usageLabel: string, message: string, type?: string,): Promise<boolean> {
   const { [usageLabel]: response } = await inquirer.prompt([{
-      type: type || "confirm",
-      name: usageLabel,
-      message: message,
-      default: true
+    type: type || "confirm",
+    name: usageLabel,
+    message: message,
+    default: true
   }]);
-  
+
   return response;
 }
 
@@ -27,16 +30,16 @@ export async function promptForUsage(usageLabel: string, message: string, type?:
 export function ensureDirectories(): string {
   const srcDir = path.join(process.cwd(), "src");
   if (!fs.existsSync(srcDir)) {
-      logger.warn("src directory not found, creating it...");
-      fs.mkdirSync(srcDir);
+    logger.warn("src directory not found, creating it...");
+    fs.mkdirSync(srcDir);
   }
-  
+
   const servicesDir = path.join(srcDir, "services");
   if (!fs.existsSync(servicesDir)) {
-      logger.info("Creating services directory...");
-      fs.mkdirSync(servicesDir);
+    logger.info("Creating services directory...");
+    fs.mkdirSync(servicesDir);
   }
-  
+
   return servicesDir;
 }
 
@@ -46,12 +49,12 @@ export function ensureDirectories(): string {
  * @param tableName - Name of the table
  * @returns Spinner and interval ID
  */
-export function startSpinner(tableName: string): { spinner: any; spinnerUpdateInterval: NodeJS.Timeout } {
+export function startSpinner(tableName: string): { spinner: Ora; spinnerUpdateInterval: NodeJS.Timeout } {
   const spinner = ora(`Generating service for ${tableName}...`).start();
   const spinnerUpdateInterval = setInterval(() => {
-      spinner.text = `Still generating service for ${tableName}... (this may take a moment)`;
+    spinner.text = `Still generating service for ${tableName}... (this may take a moment)`;
   }, 5000);
-  
+
   return { spinner, spinnerUpdateInterval };
 }
 
@@ -62,9 +65,9 @@ export function startSpinner(tableName: string): { spinner: any; spinnerUpdateIn
  * @param interval - Interval to clear
  * @param message - Failure message
  */
-export function cleanupAndFail(spinner: any, interval: NodeJS.Timeout, message: string): void {
-    clearInterval(interval);
-    spinner.fail(message);
+export function cleanupAndFail(spinner: SimpleSpinner, interval: NodeJS.Timeout, message: string): void {
+  clearInterval(interval);
+  spinner.fail(message);
 }
 
 /**
@@ -74,10 +77,10 @@ export function cleanupAndFail(spinner: any, interval: NodeJS.Timeout, message: 
  * @param message - Error message for spinner
  * @param error - Error object for logger
  */
-export function cleanupAndLogError(spinner: any, interval: NodeJS.Timeout, message: string, error: any): void {
-    clearInterval(interval);
-    spinner.fail(message);
-    logger.error(`Error generating service: ${error.message}`);
+export function cleanupAndLogError(spinner: SimpleSpinner, interval: NodeJS.Timeout, message: string, error: Error): void {
+  clearInterval(interval);
+  spinner.fail(message);
+  logger.error(`Error generating service: ${error.message}`);
 }
 
 /**
@@ -86,7 +89,7 @@ export function cleanupAndLogError(spinner: any, interval: NodeJS.Timeout, messa
  * @param interval - Interval to clear
  * @param message - Success message
  */
-export function cleanupAndSucceed(spinner: any, interval: NodeJS.Timeout, message: string): void {
+export function cleanupAndSucceed(spinner: SimpleSpinner, interval: NodeJS.Timeout, message: string): void {
   clearInterval(interval);
   spinner.succeed(message);
 }
@@ -138,7 +141,7 @@ export function checkSchemaExists(): boolean {
  * @param {object} schema - The schema object
  * @returns {string} A hash string representing the schema content
  */
-export function getSchemaHash(schema: any): string {
+export function getSchemaHash(schema: Record<string, unknown>): string {
   const stableJson = JSON.stringify(schema, (key, value) => {
     if (value && typeof value === 'object' && !Array.isArray(value)) {
       return Object.keys(value).sort().reduce<Record<string, any>>((sorted, key) => {
@@ -148,7 +151,7 @@ export function getSchemaHash(schema: any): string {
     }
     return value;
   });
-  
+
   let hash = 5381;
   for (let i = 0; i < stableJson.length; i++) {
     hash = ((hash << 5) + hash) + stableJson.charCodeAt(i);
@@ -189,7 +192,7 @@ export function validateScanPath(scanPath: string): boolean {
  * @param value - Schema value
  * @returns TypeScript type
  */
-export function getTypeFromSchema(value: any): string {
+export function getTypeFromSchema(value: unknown): string {
   if (value === null || value === undefined) {
     return 'any';
   }
@@ -222,7 +225,7 @@ export function getTypeFromSchema(value: any): string {
  * @param type - TypeScript type
  * @returns Schema type
  */
-export function mapType(type: string) {
+export function mapType(type: string): string {
   if (type.includes("string")) return "string";
   if (type.includes("number")) return "number";
   if (type.includes("boolean")) return "boolean";
@@ -239,7 +242,7 @@ export function mapType(type: string) {
  * @param tableSchema - Schema of the table
  * @returns Generated service code
  */
-export function generateServiceFromTemplate(tableName: string, tableSchema: any): string {
+export function generateServiceFromTemplate(tableName: string, tableSchema: Record<string, unknown>): string {
   const className = tableName.charAt(0).toUpperCase() + tableName.slice(1) + 'Service';
   const interfaceName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
 

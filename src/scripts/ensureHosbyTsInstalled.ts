@@ -1,4 +1,4 @@
-import ora from "ora";
+import { Ora } from "ora";
 import fs from "fs";
 import logger from "../helpers/logger.js";
 import { execSync } from "child_process";
@@ -25,7 +25,7 @@ export async function ensureHosbyTsInstalled(): Promise<boolean> {
  * @param {ReturnType<typeof ora>} spinner - Spinner instance for progress display
  * @throws {Error} If installation fails
  */
-export async function installHosbyTs(spinner: ReturnType<typeof ora>): Promise<void> {
+export async function installHosbyTs(spinner: Ora): Promise<void> {
     try {
         spinner.text = "Installing hosby-ts package...";
         const lockFiles = [
@@ -47,8 +47,9 @@ export async function installHosbyTs(spinner: ReturnType<typeof ora>): Promise<v
         logger.info(`Installing hosby-ts using: ${installer}`);
         execSync(installer, { stdio: "inherit" });
         spinner.succeed("hosby-ts installed successfully! 🎉 ");
-    } catch (error: any) {
-        spinner.fail(`Failed to install hosby-ts: ${error.message || 'Unknown error'}`);
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        spinner.fail(`Failed to install hosby-ts: ${errorMessage}`);
         logger.error("Package installation failed", error);
         console.error("Please install hosby-ts manually: npm install hosby-ts");
     }

@@ -2,9 +2,10 @@ import { Project } from "ts-morph";
 import { globSync } from "glob";
 import { ignorePatterns } from "../helpers/ignoreFiles.js";
 import { mapType } from "../helpers/utils.js";
+import { HosbySchema } from "../types/types.js";
 
-export async function scanProject(path: string) {
-  const schema: any = { tables: {} };
+export async function scanProject(path: string): Promise<HosbySchema> {
+  const schema: HosbySchema = { tables: {} };
 
   const project = new Project();
   const tsFiles = globSync(`${path}/**/*.{ts,tsx,js,jsx,vue,svelte,json}`, {

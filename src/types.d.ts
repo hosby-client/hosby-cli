@@ -4,6 +4,6 @@ declare module 'lru-cache' {
     keys(): IterableIterator<K>;
     values(): IterableIterator<V>;
     [Symbol.iterator](): IterableIterator<[K, V]>;
-    forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: unknown): void;
   }
 }

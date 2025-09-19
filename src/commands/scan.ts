@@ -9,7 +9,7 @@ import { hosbyContentClientPrompt } from "../scripts/prompts.js";
 import { createService } from "./create-service.js";
 import { validateScanPath } from "../helpers/utils.js";
 import { ensureHosbyTsInstalled, installHosbyTs } from "../scripts/ensureHosbyTsInstalled.js";
-import { AIProvider } from "../types/types.js";
+import { AIProvider, HosbySchema } from "../types/types.js";
 import { processAndFilterSchema } from "../scripts/processAndFilterSchema.js";
 
 interface ScanOptions {
@@ -29,8 +29,8 @@ export async function scan(scanPath: string = ".", options?: ScanOptions): Promi
     }
 
     const useAI = options?.ai ?? false;
-    let schema: Record<string, unknown>;
-    const filteredSchema: Record<string, unknown> = {};
+    let schema: HosbySchema;
+    const filteredSchema: HosbySchema = { tables: {} };
     const schemaStats = { tableCount: 0, columnCount: 0 };
 
     const spinner = ora("🔹 Analyzing project...").start();
@@ -58,7 +58,7 @@ export async function scan(scanPath: string = ".", options?: ScanOptions): Promi
                     provider
                 });
 
-                if (!schema || typeof schema !== "object") {
+                if (!schema || typeof schema !== "object" || !('tables' in schema)) {
                     console.error("❌ AI analysis did not return a valid schema.");
                     return;
                 }

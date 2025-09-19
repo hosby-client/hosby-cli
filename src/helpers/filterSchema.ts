@@ -1,13 +1,5 @@
 import { IGNORED_COMPONENTS } from "./ignoreFiles.js";
-
-/**
- * Schema structure for Hosby
- */
-export interface HosbySchema {
-    tables: Record<string, Record<string, string | object>>;
-    metadata?: Record<string, unknown>;
-    version?: string;
-}
+import { HosbySchema } from "../types/types.js";
 
 /**
  * Supported column data types in Hosby schema

@@ -3,7 +3,7 @@ import inquirer from "inquirer";
 import { filterProjectFiles } from "../helpers/codeFilter.js";
 import { getCredentials, saveCredentials } from "./config.js";
 import Anthropic from "@anthropic-ai/sdk";
-import { AIProvider, AI_PROVIDERS, AnalyzeOptions } from "../types/types.js";
+import { AIProvider, AI_PROVIDERS, AnalyzeOptions, HosbySchema } from "../types/types.js";
 import { fallbackPrompt, systemAIPrompt } from "../scripts/prompts.js";
 
 
@@ -11,13 +11,13 @@ import { fallbackPrompt, systemAIPrompt } from "../scripts/prompts.js";
  * Analyzes a project with AI to generate a JSON schema
  * @param {string} scanPath - Path to the project to analyze
  * @param {AnalyzeOptions} [options] - Options for AI analysis including API key and timeout
- * @returns {Promise<Record<string, unknown>>} Generated schema object
+ * @returns {Promise<HosbySchema>} Generated schema object
  * @throws {Error} If API key is missing, request times out, or token limit is exceeded
  */
 export async function analyzeWithAI(
     scanPath: string,
     options: AnalyzeOptions = {}
-): Promise<Record<string, unknown>> {
+): Promise<HosbySchema> {
     const timeout = options.timeout ?? 60000;
 
     let provider = options.provider;

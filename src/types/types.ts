@@ -4,6 +4,14 @@
  */
 export type AIProvider = "openai" | "claude";
 
+// Define a custom spinner type that matches what's being passed in
+export type SimpleSpinner = {
+  text: string;
+  succeed: (text: string) => void;
+  fail: (text: string) => void;
+};
+
+
 // Define a type for API errors
 export type ApiError = {
   code?: string;
@@ -26,13 +34,17 @@ export type LastPushData = {
 };
 
 /**
- * Hosby schema
+ * Schema structure for Hosby
  * @property {Object} tables - Tables in the schema
- * @property {Object} [key: string] - Additional properties
+ * @property {Object} [metadata] - Optional metadata
+ * @property {string} [version] - Optional version
+ * @property {any} [key: string] - Additional properties
  */
-export type HosbySchema = {
-  tables: Record<string, any>;
-  [key: string]: any;
+export interface HosbySchema {
+  tables: Record<string, Record<string, string | object>>;
+  metadata?: Record<string, unknown>;
+  version?: string;
+  [key: string]: unknown;
 }
 
 /**

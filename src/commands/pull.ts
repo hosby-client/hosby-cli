@@ -46,7 +46,7 @@ export async function pull(): Promise<void> {
         const response = await fetchServerSchema(credentials, projectCredentials, localSchemaHash, lastPullTime);
 
         await processServerResponse(response, schemaData, localSchemaHash, schemaFile, lastPullTimeFile, spinner, lastPullTime);
-    } catch (err: any) {
-        handlePullError(err, spinner);
+    } catch (err: unknown) {
+        handlePullError(err as Error, spinner);
     }
 }
