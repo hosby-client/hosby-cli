@@ -2,7 +2,7 @@
  * Logger utility for consistent logging throughout the application
  * Provides different log levels and formatting options
  */
-import { LogLevel } from '../config/config.js';
+import { LogLevel } from "../config/config.js";
 
 // ANSI color codes for terminal output
 const colors = {
@@ -13,7 +13,7 @@ const colors = {
   blue: "\x1b[34m",
   magenta: "\x1b[35m",
   cyan: "\x1b[36m",
-  gray: "\x1b[90m"
+  gray: "\x1b[90m",
 };
 
 // Re-export LogLevel for convenience
@@ -26,11 +26,21 @@ try {
   const envLogLevel = process.env.HOSBY_LOG_LEVEL?.toLowerCase();
   if (envLogLevel) {
     switch (envLogLevel) {
-      case 'debug': currentLogLevel = LogLevel.DEBUG; break;
-      case 'info': currentLogLevel = LogLevel.INFO; break;
-      case 'warn': currentLogLevel = LogLevel.WARN; break;
-      case 'error': currentLogLevel = LogLevel.ERROR; break;
-      case 'none': currentLogLevel = LogLevel.NONE; break;
+      case "debug":
+        currentLogLevel = LogLevel.DEBUG;
+        break;
+      case "info":
+        currentLogLevel = LogLevel.INFO;
+        break;
+      case "warn":
+        currentLogLevel = LogLevel.WARN;
+        break;
+      case "error":
+        currentLogLevel = LogLevel.ERROR;
+        break;
+      case "none":
+        currentLogLevel = LogLevel.NONE;
+        break;
     }
   }
 } catch (error) {
@@ -52,7 +62,7 @@ export function setLogLevel(level: LogLevel): void {
  * @returns {string} Formatted message
  */
 function formatMessage(message: string, color: string = ""): string {
-  const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  const timestamp = new Date().toISOString().replace("T", " ").substring(0, 19);
   return `${color}[${timestamp}] ${message}${colors.reset}`;
 }
 
@@ -110,7 +120,7 @@ export function error(message: string, error?: Error | unknown): void {
       if (error instanceof Error) {
         console.error(colors.red, error.message, colors.reset);
         if (error.stack) {
-          console.error(colors.gray, error.stack.split('\n').slice(1).join('\n'), colors.reset);
+          console.error(colors.gray, error.stack.split("\n").slice(1).join("\n"), colors.reset);
         }
       } else {
         console.error(colors.red, error, colors.reset);
@@ -138,13 +148,13 @@ type LoggerFunction = (message: string, data?: unknown) => void;
 
 export function createLogger(moduleName: string): Record<string, LoggerFunction> {
   const modulePrefix = `[${moduleName}]`;
-  
+
   return {
     debug: (message: string, data?: unknown) => debug(`${modulePrefix} ${message}`, data),
     info: (message: string, data?: unknown) => info(`${modulePrefix} ${message}`, data),
     warn: (message: string, data?: unknown) => warn(`${modulePrefix} ${message}`, data),
     error: (message: string, err?: Error | unknown) => error(`${modulePrefix} ${message}`, err),
-    success: (message: string) => success(`${modulePrefix} ${message}`)
+    success: (message: string) => success(`${modulePrefix} ${message}`),
   };
 }
 
@@ -156,5 +166,5 @@ export default {
   success,
   setLogLevel,
   LogLevel,
-  createLogger
+  createLogger,
 };

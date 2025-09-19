@@ -1,4 +1,3 @@
-
 import { setKey, getKey, removeKey } from "./secureStore.js";
 import path from "path";
 import fs from "fs";
@@ -22,7 +21,6 @@ export async function getCredentials(name: string): Promise<string | null> {
   return getKey(name);
 }
 
-
 /**
  * Removes a key from the secure store
  * @param {string} name - The key to remove
@@ -30,7 +28,6 @@ export async function getCredentials(name: string): Promise<string | null> {
 export async function removeCredentials(name: string): Promise<void> {
   return removeKey(name);
 }
-
 
 /**
  * Sets project informations in the schema file
@@ -41,11 +38,11 @@ export async function setProjectInfos(projectId: string, projectName: string): P
   try {
     const schemaPath = path.join(process.cwd(), "hosby.schema.json");
     let schema: HosbySchema = {
-      tables: {}
+      tables: {},
     };
 
     if (fs.existsSync(schemaPath)) {
-      const content = fs.readFileSync(schemaPath, 'utf8');
+      const content = fs.readFileSync(schemaPath, "utf8");
       schema = JSON.parse(content);
     }
 
@@ -59,9 +56,7 @@ export async function setProjectInfos(projectId: string, projectName: string): P
   } catch (error: unknown) {
     throw new Error(`Failed to save project info: ${(error as Error).message}`);
   }
-
 }
-
 
 /**
  * Gets project information from the schema file
@@ -70,9 +65,12 @@ export async function setProjectInfos(projectId: string, projectName: string): P
 export async function getProjectInfos(): Promise<ProjectCredentials> {
   try {
     const schemaPath = path.join(process.cwd(), "hosby.schema.json");
-    const schemaContent = fs.readFileSync(schemaPath, 'utf8');
+    const schemaContent = fs.readFileSync(schemaPath, "utf8");
     const schema: HosbySchema = JSON.parse(schemaContent);
-    const projectInfo = schema?.metadata?.project || {};
+    const projectInfo = (schema?.metadata?.project as Record<string, string>) || {
+      id: "",
+      name: "",
+    };
 
     return {
       id: projectInfo.id,
@@ -81,7 +79,7 @@ export async function getProjectInfos(): Promise<ProjectCredentials> {
   } catch {
     return {
       id: "",
-      name: ""
+      name: "",
     };
   }
 }

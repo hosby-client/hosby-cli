@@ -380,7 +380,7 @@ export const crudMethodsDoc: string = `
 - Example: await client.bulkDelete('users', [{ field: 'active', value: false }])
 `;
 
-export const generateServiceWithAIprompt = (tableName: string, tableSchema: any): string => {
+export const generateServiceWithAIprompt = (tableName: string, tableSchema: unknown): string => {
   return `
     Generate a TypeScript CRUD service for a table named "${tableName}" with the following schema:
     ${JSON.stringify(tableSchema, null, 2)}
