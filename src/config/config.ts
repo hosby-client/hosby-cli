@@ -10,8 +10,7 @@ export enum LogLevel {
   NONE = 4,
 }
 
-// export const API_BASE_URL = "https://api.hosby.io/cli";
-export const API_BASE_URL = "http://localhost:1350/cli";
+export const API_BASE_URL = "https://api.hosby.io/cli";
 
 /**
  * Configuration interface for Hosby CLI
