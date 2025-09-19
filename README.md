@@ -1,8 +1,10 @@
 # Hosby CLI
 
-<p align="center">
-  <img src="https://via.placeholder.com/200x200?text=Hosby" alt="Hosby Logo" width="200" height="200">
-</p>
+<div align="center">
+  <img src="https://hosby.io/hosby.png" alt="Hosby Logo" width="200"/>
+  <br/>
+  <a href="https://docs.hosby.io">Hosby Documentation</a> | <a href="https://hosby.io/en">Hosby Platform</a>
+</div>
 
 <p align="center">
   <strong>A powerful CLI tool for generating and managing database schemas for front-end, mobile, and desktop projects.</strong>

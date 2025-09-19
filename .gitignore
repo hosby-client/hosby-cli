@@ -2,4 +2,4 @@ dist/
 node_modules/
 .hosby.auth.json
 .env
-.tgz
+*.tgz
