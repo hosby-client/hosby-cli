@@ -32,7 +32,7 @@ class HosbyQuery {
       throw new Error("Failed to initialize Hosby client. Check your connection and credentials.");
     }
   }
- 
+
   public get client(): HosbyClient {
     if (!this.isInitialized) {
       throw new Error("Hosby client not initialized. Ensure the service is loaded before use.");

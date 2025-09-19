@@ -1,13 +1,13 @@
-import fs from 'fs';
-import path from 'path';
-import os from 'os';
+import fs from "fs";
+import path from "path";
+import os from "os";
 
 export enum LogLevel {
   DEBUG = 0,
   INFO = 1,
   WARN = 2,
   ERROR = 3,
-  NONE = 4
+  NONE = 4,
 }
 
 // export const API_BASE_URL = "https://api.hosby.io/cli";
@@ -30,11 +30,11 @@ export interface HosbyConfig {
 const DEFAULT_CONFIG: HosbyConfig = {
   logLevel: LogLevel.INFO,
   defaultTimeout: 30000,
-  checkForUpdates: true
+  checkForUpdates: true,
 };
 
-const CONFIG_DIR = path.join(os.homedir(), '.hosby');
-const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
+const CONFIG_DIR = path.join(os.homedir(), ".hosby");
+const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 
 /**
  * Gets the current configuration
@@ -51,10 +51,10 @@ export function getConfig(): HosbyConfig {
       return { ...DEFAULT_CONFIG };
     }
 
-    const config = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf-8'));
+    const config = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf-8"));
     return { ...DEFAULT_CONFIG, ...config };
   } catch (error) {
-    console.error('Error reading config file:', error);
+    console.error("Error reading config file:", error);
     return { ...DEFAULT_CONFIG };
   }
 }
@@ -76,7 +76,7 @@ export function updateConfig(updates: Partial<HosbyConfig>): HosbyConfig {
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(newConfig, null, 2));
     return newConfig;
   } catch (error) {
-    console.error('Error updating config file:', error);
+    console.error("Error updating config file:", error);
     return getConfig();
   }
 }
@@ -85,7 +85,7 @@ export function updateConfig(updates: Partial<HosbyConfig>): HosbyConfig {
  * Gets the user credentials
  * @returns {HosbyConfig['credentials']} User credentials
  */
-export function getCredentials(): HosbyConfig['credentials'] {
+export function getCredentials(): HosbyConfig["credentials"] {
   return getConfig().credentials;
 }
 
@@ -93,14 +93,14 @@ export function getCredentials(): HosbyConfig['credentials'] {
  * Updates the user credentials
  * @param {HosbyConfig['credentials']} credentials - User credentials
  */
-export function updateCredentials(credentials: HosbyConfig['credentials']): void {
+export function updateCredentials(credentials: HosbyConfig["credentials"]): void {
   const config = getConfig();
   updateConfig({
     ...config,
     credentials: {
       ...config.credentials,
-      ...credentials
-    }
+      ...credentials,
+    },
   });
 }
 
@@ -114,11 +114,16 @@ export function getLogLevel(): LogLevel {
     const envLogLevel = process.env.HOSBY_LOG_LEVEL?.toLowerCase();
     if (envLogLevel) {
       switch (envLogLevel) {
-        case 'debug': return LogLevel.DEBUG;
-        case 'info': return LogLevel.INFO;
-        case 'warn': return LogLevel.WARN;
-        case 'error': return LogLevel.ERROR;
-        case 'none': return LogLevel.NONE;
+        case "debug":
+          return LogLevel.DEBUG;
+        case "info":
+          return LogLevel.INFO;
+        case "warn":
+          return LogLevel.WARN;
+        case "error":
+          return LogLevel.ERROR;
+        case "none":
+          return LogLevel.NONE;
       }
     }
 
@@ -127,10 +132,12 @@ export function getLogLevel(): LogLevel {
         return LogLevel.INFO;
       }
 
-      const configData = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf-8'));
-      if (typeof configData.logLevel === 'number' &&
+      const configData = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf-8"));
+      if (
+        typeof configData.logLevel === "number" &&
         configData.logLevel >= LogLevel.DEBUG &&
-        configData.logLevel <= LogLevel.NONE) {
+        configData.logLevel <= LogLevel.NONE
+      ) {
         return configData.logLevel;
       }
       return LogLevel.INFO;

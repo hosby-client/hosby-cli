@@ -34,10 +34,10 @@ export async function requireLogin(): Promise<AuthCredentials> {
 export function createAuthHeaders(credentials: AuthCredentials): object {
   return {
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${credentials.sessionToken}`,
-      'x-hosby-cli': true,
-      'x-hosby-user-id': credentials.userId,
-    }
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${credentials.sessionToken}`,
+      "x-hosby-cli": true,
+      "x-hosby-user-id": credentials.userId,
+    },
   };
 }

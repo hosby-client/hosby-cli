@@ -11,7 +11,6 @@ export type SimpleSpinner = {
   fail: (text: string) => void;
 };
 
-
 // Define a type for API errors
 export type ApiError = {
   code?: string;
@@ -67,7 +66,7 @@ export interface AuthCredentials {
 export type ProjectCredentials = {
   id: string;
   name: string;
-}
+};
 
 /**
  * Options for AI analysis
@@ -81,8 +80,7 @@ export type AnalyzeOptions = {
   timeout?: number;
   provider?: AIProvider;
   customSystemPrompt?: string;
-}
-
+};
 
 /**
  * AI provider configuration
@@ -100,8 +98,7 @@ export type AIProviderConfig = {
   envVarName: string;
   defaultModel: string;
   validateKey: (key: string) => boolean | string;
-}
-
+};
 
 /**
  * Schema data structure
@@ -111,7 +108,7 @@ export type AIProviderConfig = {
 export type SchemaData = {
   tables: Record<string, any>;
   [key: string]: any;
-}
+};
 
 /**
  * Server response structure
@@ -123,7 +120,7 @@ export type ServerResponse = {
   schema?: SchemaData;
   message?: string;
   [key: string]: any;
-}
+};
 
 /**
  * Last pull data structure
@@ -133,17 +130,17 @@ export type ServerResponse = {
 export type LastPullData = {
   time: string;
   hash: string;
-}
+};
 
 /**
  * Action choices for conflict resolution
  * @enum {string}
  */
 export enum ConflictAction {
-  SERVER = 'server',
-  LOCAL = 'local',
-  MERGE = 'merge',
-  DIFF = 'diff'
+  SERVER = "server",
+  LOCAL = "local",
+  MERGE = "merge",
+  DIFF = "diff",
 }
 
 /**
@@ -160,7 +157,7 @@ export const AI_PROVIDERS: Record<AIProvider, AIProviderConfig> = {
     validateKey: (key: string) => {
       if (!key.startsWith("sk-")) return "Invalid OpenAI API key format (should start with 'sk-')";
       return true;
-    }
+    },
   },
   claude: {
     name: "Claude AI",
@@ -171,7 +168,6 @@ export const AI_PROVIDERS: Record<AIProvider, AIProviderConfig> = {
     validateKey: (key: string) => {
       if (!key) return "API key is required";
       return true;
-    }
-  }
+    },
+  },
 };
-

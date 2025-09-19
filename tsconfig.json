@@ -10,10 +10,6 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": [
-    "src"
-  ],
-  "files": [
-    "src/types.d.ts"
-  ]
+  "include": ["src"],
+  "files": ["src/types.d.ts"]
 }

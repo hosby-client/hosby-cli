@@ -64,21 +64,25 @@ hosby --version
 ### Quick Start
 
 1. **Install the CLI**
+
    ```bash
    npm install -g hosby-cli
    ```
 
 2. **Log in to your Hosby account**
+
    ```bash
    hosby login
    ```
 
 3. **Configure your project**
+
    ```bash
    hosby config project
    ```
 
 4. **Scan your project to generate a schema**
+
    ```bash
    hosby scan --ai
    ```
@@ -95,6 +99,7 @@ hosby --version
 ```bash
 hosby login
 ```
+
 Authenticate with the Hosby platform to access cloud features and synchronization.
 
 ### Project Management
@@ -156,6 +161,7 @@ hosby config ai
 ```
 
 This interactive command allows you to:
+
 - Select your preferred AI provider
 - Configure your API key
 - Save your preferences for future use
@@ -180,6 +186,7 @@ hosby config project
 ```
 
 This will prompt you for:
+
 - Project ID
 - Project Name
 
@@ -207,6 +214,7 @@ export HOSBY_LOG_LEVEL=error
 ```
 
 Or use command flags:
+
 ```bash
 hosby [command] --debug
 hosby [command] --quiet
@@ -263,4 +271,3 @@ If you encounter any issues or have questions:
   <strong>Hosby CLI v0.3.0</strong><br>
   Made with ❤️ by the Hosby Team
 </p>
-

@@ -4,12 +4,17 @@ import { Ora } from "ora";
 import chalk from "chalk";
 import { requireLogin, createAuthHeaders } from "../core/auth.js";
 import { getSchemaHash } from "../helpers/utils.js";
-import { ApiError, AuthCredentials, LastPushData, ProjectCredentials, SchemaData } from "../types/types.js";
+import {
+  ApiError,
+  AuthCredentials,
+  LastPushData,
+  ProjectCredentials,
+  SchemaData,
+} from "../types/types.js";
 import logger from "../helpers/logger.js";
 import { API_BASE_URL } from "../config/config.js";
 
 const API_TIMEOUT = 30000;
-
 
 /**
  * Gets local schema information including schema data and hash
@@ -28,7 +33,7 @@ export async function getLocalSchemaInfo(schemaFile: string): Promise<{
     logger.debug("Schema loaded successfully", {
       size: fileContent.length,
       tables: Object.keys(schemaData.tables || {}).length,
-      schemaHash
+      schemaHash,
     });
 
     return { schemaData, schemaHash };
@@ -61,7 +66,11 @@ export async function authenticate(): Promise<AuthCredentials> {
  * @param {boolean} force - If true, ignore unchanged schema check
  * @returns {Promise<boolean>} True if schema has changed or force is true
  */
-export async function hasSchemaChanged(lastPushFile: string, schemaHash: string, force: boolean): Promise<boolean> {
+export async function hasSchemaChanged(
+  lastPushFile: string,
+  schemaHash: string,
+  force: boolean
+): Promise<boolean> {
   if (force) {
     logger.debug("Force push requested, skipping schema change check");
     return true;
@@ -70,7 +79,10 @@ export async function hasSchemaChanged(lastPushFile: string, schemaHash: string,
   try {
     if (fs.existsSync(lastPushFile)) {
       const lastPushData: LastPushData = JSON.parse(fs.readFileSync(lastPushFile, "utf-8"));
-      logger.debug("Read last push data", { lastPushHash: lastPushData.hash, currentHash: schemaHash });
+      logger.debug("Read last push data", {
+        lastPushHash: lastPushData.hash,
+        currentHash: schemaHash,
+      });
 
       if (lastPushData.hash === schemaHash) {
         logger.info("Schema unchanged since last push", { lastPush: lastPushData.time });
@@ -102,7 +114,7 @@ export async function pushSchemaToServer(
 ): Promise<AxiosResponse> {
   const axiosConfig: AxiosRequestConfig = {
     ...createAuthHeaders(authCredentials),
-    timeout: API_TIMEOUT
+    timeout: API_TIMEOUT,
   };
 
   const url = `${API_BASE_URL}/projects/${projectCredentials.id}/push`;
@@ -110,7 +122,7 @@ export async function pushSchemaToServer(
   logger.debug("Sending schema to server", {
     url,
     schemaHash,
-    tableCount: Object.keys(schemaData.tables || {}).length
+    tableCount: Object.keys(schemaData.tables || {}).length,
   });
 
   return axios.post(
@@ -119,9 +131,9 @@ export async function pushSchemaToServer(
       ...schemaData,
       _meta: {
         schemaHash,
-        clientVersion: process.env.npm_package_version || '0.0.0',
-        timestamp: new Date().toISOString()
-      }
+        clientVersion: process.env.npm_package_version || "0.0.0",
+        timestamp: new Date().toISOString(),
+      },
     },
     axiosConfig
   );
@@ -133,18 +145,22 @@ export async function pushSchemaToServer(
  * @param {string} schemaHash - Hash of the schema
  * @param {string} projectId - Project ID
  */
-export function updateLastPushFile(lastPushFile: string, schemaHash: string, projectId: string): void {
+export function updateLastPushFile(
+  lastPushFile: string,
+  schemaHash: string,
+  projectId: string
+): void {
   const lastPushData: LastPushData = {
     time: new Date().toISOString(),
     hash: schemaHash,
-    id: projectId
+    id: projectId,
   };
 
   fs.writeFileSync(lastPushFile, JSON.stringify(lastPushData), "utf-8");
   logger.debug("Updated last push file", {
     time: lastPushData.time,
     hash: schemaHash,
-    projectId
+    projectId,
   });
 }
 
@@ -159,19 +175,23 @@ export function handlePushError(err: unknown, spinner: Ora): void {
   logger.error("Push operation failed", err);
 
   if (apiError.code === "ECONNABORTED") {
-    console.error(chalk.red("Request timed out. Please check your internet connection and try again."));
+    console.error(
+      chalk.red("Request timed out. Please check your internet connection and try again.")
+    );
     logger.error("Request timeout", { timeout: `${API_TIMEOUT}ms` });
   } else if (apiError.response?.status === 401) {
-    console.error(chalk.red("Authentication failed. Please run 'hosby login' to refresh your credentials."));
+    console.error(
+      chalk.red("Authentication failed. Please run 'hosby login' to refresh your credentials.")
+    );
     logger.error("Authentication failed", {
       status: apiError.response?.status,
-      statusText: apiError.response?.statusText
+      statusText: apiError.response?.statusText,
     });
   } else if (apiError.response?.data) {
     console.error(chalk.red("Server error:"), apiError.response.data);
     logger.error("Server error response", {
       status: apiError.response?.status,
-      data: apiError.response?.data
+      data: apiError.response?.data,
     });
   } else if (err instanceof Error) {
     console.error(chalk.red("Error:"), err.message);

@@ -14,7 +14,6 @@ const SECRET = process.env.HOSBY_SECRET || "change-this-secret";
  * @param value The value to save.
  */
 export function setKey(key: string, value: string): void {
-
   if (!fs.existsSync(HOSBY_DIR)) fs.mkdirSync(HOSBY_DIR, { recursive: true });
 
   let store: Record<string, { iv: string; tag: string; value: string }> = {};
@@ -23,7 +22,7 @@ export function setKey(key: string, value: string): void {
       store = JSON.parse(fs.readFileSync(STORE_FILE, "utf-8"));
     } catch (error) {
       // If file exists but can't be parsed, start with empty store
-      console.error('Error parsing credentials file:', error);
+      console.error("Error parsing credentials file:", error);
     }
   }
 
@@ -36,7 +35,6 @@ export function setKey(key: string, value: string): void {
   store[key] = { iv: iv.toString("hex"), tag, value: encrypted };
   fs.writeFileSync(STORE_FILE, JSON.stringify(store, null, 2), "utf-8");
 }
-
 
 /**
  * Get a value from the secure store.

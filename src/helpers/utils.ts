@@ -11,17 +11,22 @@ import { SimpleSpinner } from "../types/types.js";
  * Prompts the user to choose whether to use AI
  * @returns Boolean indicating whether to use AI
  */
-export async function promptForUsage(usageLabel: string, message: string, type?: string,): Promise<boolean> {
-  const { [usageLabel]: response } = await inquirer.prompt([{
-    type: type || "confirm",
-    name: usageLabel,
-    message: message,
-    default: true
-  }]);
+export async function promptForUsage(
+  usageLabel: string,
+  message: string,
+  type?: string
+): Promise<boolean> {
+  const { [usageLabel]: response } = await inquirer.prompt([
+    {
+      type: type || "confirm",
+      name: usageLabel,
+      message: message,
+      default: true,
+    },
+  ]);
 
   return response;
 }
-
 
 /**
  * Ensures that required directories exist
@@ -43,13 +48,15 @@ export function ensureDirectories(): string {
   return servicesDir;
 }
 
-
 /**
  * Starts the spinner for visual feedback
  * @param tableName - Name of the table
  * @returns Spinner and interval ID
  */
-export function startSpinner(tableName: string): { spinner: Ora; spinnerUpdateInterval: NodeJS.Timeout } {
+export function startSpinner(tableName: string): {
+  spinner: Ora;
+  spinnerUpdateInterval: NodeJS.Timeout;
+} {
   const spinner = ora(`Generating service for ${tableName}...`).start();
   const spinnerUpdateInterval = setInterval(() => {
     spinner.text = `Still generating service for ${tableName}... (this may take a moment)`;
@@ -58,14 +65,17 @@ export function startSpinner(tableName: string): { spinner: Ora; spinnerUpdateIn
   return { spinner, spinnerUpdateInterval };
 }
 
-
 /**
  * Cleans up resources and logs failure
  * @param spinner - Spinner to update
  * @param interval - Interval to clear
  * @param message - Failure message
  */
-export function cleanupAndFail(spinner: SimpleSpinner, interval: NodeJS.Timeout, message: string): void {
+export function cleanupAndFail(
+  spinner: SimpleSpinner,
+  interval: NodeJS.Timeout,
+  message: string
+): void {
   clearInterval(interval);
   spinner.fail(message);
 }
@@ -77,7 +87,12 @@ export function cleanupAndFail(spinner: SimpleSpinner, interval: NodeJS.Timeout,
  * @param message - Error message for spinner
  * @param error - Error object for logger
  */
-export function cleanupAndLogError(spinner: SimpleSpinner, interval: NodeJS.Timeout, message: string, error: Error): void {
+export function cleanupAndLogError(
+  spinner: SimpleSpinner,
+  interval: NodeJS.Timeout,
+  message: string,
+  error: Error
+): void {
   clearInterval(interval);
   spinner.fail(message);
   logger.error(`Error generating service: ${error.message}`);
@@ -89,11 +104,14 @@ export function cleanupAndLogError(spinner: SimpleSpinner, interval: NodeJS.Time
  * @param interval - Interval to clear
  * @param message - Success message
  */
-export function cleanupAndSucceed(spinner: SimpleSpinner, interval: NodeJS.Timeout, message: string): void {
+export function cleanupAndSucceed(
+  spinner: SimpleSpinner,
+  interval: NodeJS.Timeout,
+  message: string
+): void {
   clearInterval(interval);
   spinner.succeed(message);
 }
-
 
 /**
  * Gets the last modified time of a schema file
@@ -143,21 +161,23 @@ export function checkSchemaExists(): boolean {
  */
 export function getSchemaHash(schema: Record<string, unknown>): string {
   const stableJson = JSON.stringify(schema, (key, value) => {
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-      return Object.keys(value).sort().reduce<Record<string, any>>((sorted, key) => {
-        sorted[key] = value[key];
-        return sorted;
-      }, {});
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      return Object.keys(value)
+        .sort()
+        .reduce<Record<string, any>>((sorted, key) => {
+          sorted[key] = value[key];
+          return sorted;
+        }, {});
     }
     return value;
   });
 
   let hash = 5381;
   for (let i = 0; i < stableJson.length; i++) {
-    hash = ((hash << 5) + hash) + stableJson.charCodeAt(i);
+    hash = (hash << 5) + hash + stableJson.charCodeAt(i);
   }
 
-  return (hash & 0x7FFFFFFF).toString(36);
+  return (hash & 0x7fffffff).toString(36);
 }
 
 /**
@@ -185,8 +205,6 @@ export function validateScanPath(scanPath: string): boolean {
   }
 }
 
-
-
 /**
  * Determine TypeScript type from schema value
  * @param value - Schema value
@@ -194,29 +212,29 @@ export function validateScanPath(scanPath: string): boolean {
  */
 export function getTypeFromSchema(value: unknown): string {
   if (value === null || value === undefined) {
-    return 'any';
+    return "any";
   }
 
   if (Array.isArray(value)) {
     if (value.length === 0) {
-      return 'any[]';
+      return "any[]";
     }
     return `${getTypeFromSchema(value[0])}[]`;
   }
 
-  if (typeof value === 'object') {
-    return 'Record<string, any>';
+  if (typeof value === "object") {
+    return "Record<string, any>";
   }
 
   switch (typeof value) {
-    case 'string':
-      return 'string';
-    case 'number':
-      return 'number';
-    case 'boolean':
-      return 'boolean';
+    case "string":
+      return "string";
+    case "number":
+      return "number";
+    case "boolean":
+      return "boolean";
     default:
-      return 'any';
+      return "any";
   }
 }
 
@@ -235,23 +253,26 @@ export function mapType(type: string): string {
   return "string";
 }
 
-
 /**
  * Generate a service from a template
  * @param tableName - Name of the table
  * @param tableSchema - Schema of the table
  * @returns Generated service code
  */
-export function generateServiceFromTemplate(tableName: string, tableSchema: Record<string, unknown>): string {
-  const className = tableName.charAt(0).toUpperCase() + tableName.slice(1) + 'Service';
+export function generateServiceFromTemplate(
+  tableName: string,
+  tableSchema: Record<string, unknown>
+): string {
+  const className = tableName.charAt(0).toUpperCase() + tableName.slice(1) + "Service";
   const interfaceName = tableName.charAt(0).toUpperCase() + tableName.slice(1);
 
   const properties = Object.entries(tableSchema)
-    .filter(([key]) => !['id', 'createdAt', 'updatedAt'].includes(key))
+    .filter(([key]) => !["id", "createdAt", "updatedAt"].includes(key))
     .map(([key, value]) => {
       const type = getTypeFromSchema(value);
       return `  ${key}: ${type};`;
-    }).join('\n');
+    })
+    .join("\n");
 
   return `import { hosbyQuery } from '../api/hosbyClient';
 

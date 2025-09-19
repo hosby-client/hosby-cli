@@ -14,12 +14,12 @@ export async function scanProject(path: string): Promise<HosbySchema> {
 
   project.addSourceFilesAtPaths(tsFiles);
 
-  project.getSourceFiles().forEach((file) => {
-    file.getInterfaces().forEach((intf) => {
+  project.getSourceFiles().forEach(file => {
+    file.getInterfaces().forEach(intf => {
       const tableName = intf.getName().toLowerCase() + "s";
       schema.tables[tableName] = {};
 
-      intf.getProperties().forEach((prop) => {
+      intf.getProperties().forEach(prop => {
         const name = prop.getName();
         const type = prop.getType().getText();
         schema.tables[tableName][name] = mapType(type);
