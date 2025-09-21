@@ -48,8 +48,8 @@ export async function setProjectInfos(projectId: string, projectName: string): P
 
     schema.metadata = schema.metadata || {};
     schema.metadata.project = {
-      projectId: projectId,
-      projectName: projectName,
+      id: projectId,
+      name: projectName,
     };
 
     fs.writeFileSync(schemaPath, JSON.stringify(schema, null, 2));
